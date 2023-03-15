@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Future Use</title>
+
+		<header id="hearder1deco" class="header1deco">
+			<div class="companylogo"><!--Compamy Logo--></div>
+			<div class="companyname">Aktus M.U. Kreativ Pte Ltd
+				<hr width="100%"
+        			size="1"
+					color="green" noshade
+        			align="center"
+					>
+    			<hr width="95%"
+        			size="1"
+        			align="center"
+        			color="blue" noshade
+					>
+    			<hr width="90%;"
+        			color="red"
+        			size="1"
+        			align="center"
+					>
+
+			</div>
+			<nav>
+				<ul class="ul">
+					<li>
+						<input type="button" value="Back" onclick="history.back()">
+					</li>
+				</ul>
+			</nav>
+		</header>
+	</head>
+
+	<body>
+		<header id="showcase" class="grid">
+			<div class="bg-img"></div>
+			<video poster="static/future.png"></video>
+			<div class="content-wrap">
+			<br/>
+			<h2 class="content-title">
+				Have a new template in mind ?
+			</h2>
+			<a
+				href="https://api.whatsapp.com/send?phone=6581213110"
+				target="_blank"
+				>Let us know via <input type="button" value="WhatsApp"></a>
+			</div>
+			<br /><br />
+		</header>
+	</body>
+
+	<footer id="main-footer" class="grid">
+		<div class="address">
+			105 Sims Avenue, Chancerlodge Complex. #03-08. Singapore 387429.
+		</div>
+		<div class="copyright">
+			&copy; Copyright 2022. Aktus M.U. Kreativ Pte Ltd
+		</div>
+	</footer>
+</html>
+
+<style>
+	/* CORE STYLE */
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	top: 50%;
+	left: 50%;
+	width: 30em;
+	height: 18em;
+	transform: translate(-51.5%, -110%);
+	border: 1px solid whitesmoke;
+	position: fixed;
+}
+
+img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+hr {
+	margin-top: 2.8px;
+	margin-bottom: 2.8px;
+}
+
+h2 {
+	margin: 0em;
+	padding: 1em 0;
+	letter-spacing: 0.038em;
+}
+
+a {
+	letter-spacing: 0.07em;
+	text-decoration: none;
+	color: whitesmoke;
+	font-weight:bolder;
+}
+
+a :hover {
+	color: #25D366;
+	font-weight:bolder;
+}
+
+/* HEADER STYLING */
+
+#hearder1deco {
+	width: 100%;
+	opacity: 0.54;
+}
+
+.companylogo {
+	display: none;
+	padding: 0 3em 0 3em;
+}
+
+.companyname {
+	margin: 1em;
+	font-size: 1.3em;
+	color: whitesmoke;
+}
+
+/* NAV BAR STYLING */
+
+nav {
+	margin: 2em 0 2em;
+	columns: 1;
+
+}
+
+nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+nav li :hover {
+	color: red;
+	font-weight:bolder;
+}
+
+/* END OF CORE STYLE. START OF ONE OFF ITEMS */
+
+/* END OF ONE OFF ITEMS. START OF INDIVIDUAL SECTION STYLES */
+#showcase {
+	background: rgba(0, 0, 0, 0.4);
+	min-height: 500px;
+	text-align: center;
+	text-shadow: -2px 2px 2px black;
+}
+
+#showcase .bg-img {
+	position: absolute;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+	z-index: -1;
+	opacity: 0.6;
+}
+
+#showcase video {
+	display: none;
+}
+
+iframe {
+	display: none;
+}
+
+#showcase .content-wrap,
+#section-a .content-wrap {
+	padding: 0 1.5em;
+}
+
+#showcase .content-wrap {
+	margin-top: 50%;
+	color: whitesmoke;
+	text-shadow: 0px 0px 2px black;
+}
+
+/* FOOTER */
+
+#main-footer {
+	display: block;
+	padding: 2.1em;
+	background: #000;
+	color: whitesmoke;
+	letter-spacing: 0.05em;
+	text-align: center;
+	line-height: 1.8em;
+	font-size: smaller;
+
+}
+
+/* MEDIA QUERY */
+
+@media (min-width: 700px) {
+	#showcase {
+		background: rgba(0, 020, 0, 0);
+		color: white;
+	}
+
+	.bg-img {
+		display: none;
+	}
+
+	.header1deco {
+		position: absolute;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		display: flex;
+		background-color: #333;
+		opacity: 0.8;
+	}
+
+	.companylogo {
+		background-image: url(static/bg.png);
+		display: inline-block;
+		margin: 20px 0px;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+
+	.companyname {
+		display: fixed;
+		margin-top: 1.4em;
+	}
+
+	nav {
+		position: relative;
+		margin-left: auto;
+		display: inline;
+	}
+
+	nav .ul li {
+		margin: 0px;
+		padding: 0 1.2em;
+	}
+
+	.ul a {
+		margin: 0;
+		padding: 0;
+		font-size: 12px;
+	}
+
+	#showcase video {
+		display: inline-flex;
+		position: absolute;
+		margin: 0;
+		padding: 0;
+		margin-top: 0;
+		margin-left: 0;
+		min-width: 100%;
+		min-height: auto;
+		width: 100%; /* IMPORTANT */
+		height: 500px; /* IMPORTANT */
+		object-fit: cover;
+		z-index: -1;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: 1fr repeat(2, minmax(auto, 25em)) 1fr;
+	}
+
+	.content-wrap,
+	ul {
+		grid-column: 1/5;
+	}
+}
+
+/* MEDIA QUERY */
+
+@media (max-width: 699px) {
+	body {
+		top: 50%;
+		left: 50%;
+		width: 28em;
+		height: 19em;
+		transform: translate(-51.5%, -110%);
+		border: 1px solid whitesmoke;
+		position: center;
+	}
+
+	#showcase {
+		background: rgba(0, 020, 0, 0);
+		color: white;
+	}
+
+	.bg-img {
+		display: none;
+	}
+
+	.header1deco {
+		position: absolute;
+		margin: 0;
+		padding: 0;
+		width: 80%;
+		display: flex;
+		background-color: #333;
+		opacity: 0.8;
+	}
+
+	.companylogo {
+		background-image: url(static/bg.png);
+		display: inline-block;
+		margin: 20px 0px;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+
+	.companyname {
+		display: center;
+		margin-top: 2.8em;
+		font-size: 18px;
+	}
+
+	nav {
+		position: relative;
+		margin-left: auto;
+		display: inline;
+	}
+
+	nav .ul li {
+		margin: 0px;
+		margin-top: 28px;
+		padding: 0 1em;
+	}
+
+	.ul a {
+		margin: 0;
+		padding: 0;
+		font-size: 12px;
+	}
+
+	#showcase video {
+		display: inline-flex;
+		position: absolute;
+		margin: 0;
+		padding: 0;
+		margin-top: 0;
+		margin-left: 0;
+		min-width: 100%;
+		min-height: auto;
+		width: 100%; /* IMPORTANT */
+		height: 500px; /* IMPORTANT */
+		object-fit: cover;
+		z-index: -1;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: 1fr repeat(2, minmax(auto, 25em)) 1fr;
+	}
+
+	.content-wrap,
+	ul {
+		grid-column: 1/5;
+	}
+}
+
+</style>

@@ -1,0 +1,821 @@
+<!--09/6/2022></-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Order - Maintenance</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+
+    <style>
+        .main{
+          margin-top: 80px;
+          }
+
+        h1, h2, h3 {
+            text-align:center;
+        }
+
+        h8 {
+            margin-left: 48px;
+
+        }
+
+        h9 {
+          margin-right: 0px;
+        }
+
+        .header{
+            text-align:center;
+        }
+
+        .mid {
+            margin:auto;
+            width:80%;
+            text-align:center;
+            padding: 10px;
+            text-decoration: underline;   
+	          text-decoration-color: black;
+            
+        }
+
+
+        .thirds {
+            text-align:left;
+            width: 25%;
+            float: left;
+        }
+
+        .partition {
+            text-align:left;
+            width: 50%;
+            float: left;
+            padding-left: 3%;
+        }
+        .partition1 {
+            text-align:right;
+            width: 50%;
+            float: left;
+            padding-right: 3%;
+        }
+
+        .partition-group {
+            margin:auto;
+            width: 85%;
+        }
+
+        .partition-bottom{
+            text-align:center;
+        }
+
+        label {
+          display: block;
+          padding-left: 0px;
+          text-indent: 0px;
+        }
+
+        input {
+          width: 23px;
+          height: 23px;
+          padding: 0;
+          margin:0;
+          vertical-align: center;
+          position: relative;
+          top: 3px;
+          *overflow: hidden;
+        }
+
+        .jobdone_toggle {
+
+            text-align:center;
+            margin:auto;
+        }
+
+        div.partition1 label { float: left; width: 70%; text-align: right; }
+        div.clearboth { clear: both }
+
+        
+        table, th {
+        border:1px solid black;
+        text-align: center;
+        font-size: medium;
+          }
+
+        td {
+          border:1px solid black;
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+
+        tr:nth-child(even) {
+        background-color: lightgreen;
+        }
+
+        th {
+        background-color: lightgrey;
+        }
+
+
+
+
+
+
+
+/* Responsive based on preset screen size */
+@media (max-width: 400px) {
+        h3 {
+            font-size: large;
+        }
+
+        h8 {
+            margin-left: 0px;
+            font-size: small;
+            padding-left: 30px;
+        }
+
+
+        h9 {
+            margin-left: 0px;
+            font-size: smaller;
+            padding-right: 0px;
+        }
+
+        h5 {
+            font-size: 14px;
+        }
+
+        p {
+            font-size: 13px;
+        }
+
+        .partition-group {
+            margin:auto;
+            width: 93%;
+        }
+
+        .partition {
+            text-align:left;
+            width: 50%;
+            float: left;
+            padding-left: 3%;
+        }
+
+        .partition1 {
+            text-align:right;
+            width: 50%;
+            float: left;
+            padding-right: 3%;
+        }
+
+        label {
+          display: block;
+          padding-left: 5px;
+          text-indent: -10px;
+          font-size: smaller;
+        }
+
+        input {
+          width: 13px;
+          height: 13px;
+          padding: 0;
+          margin: 0px;
+          vertical-align: top;
+          position: relative;
+          top: 0px;
+          *overflow: hidden;
+        }
+
+        input[type=text] {
+            word-wrap: break-word;
+            word-break: break-all;
+            height: auto;
+            width: 150px;
+        }
+
+        table, th {
+        border:1px solid black;
+        text-align: center;
+        font-size: 9px;
+          }
+}
+
+
+
+    </style>
+
+</head>
+<body>
+{% block navbar %}
+{% include "includes/_navbar3.html" %}
+{% endblock %}
+<div class="main">
+    <h3 class="font-weight-light">LIFT SERVICING CHECKLIST</h3>
+    <br>
+<form action="{{url_for('creatingreport2', track_no=current_order[0]) }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <div class="header" >
+
+            <div class="form-group">
+                <h5 class="font-weight-bold">Tracking No: {{current_order[0]}}</h5>
+                <br>
+                <p class="font-weight-bold">Customer: {{current_order[5]}}</p>
+                <p class="font-weight-bold">Location: {{current_order[6]}}</p>
+              {% if current_order[7] == 'Others' %}
+                <p class="font-weight-bold">Lift Type: Others - {{current_order[8]}}</p>
+              {% else %}
+                <p class="font-weight-bold">Lift Type: {{current_order[7]}}</p>
+              {% endif %}
+
+              {% if current_order[9] == 'Others' %}
+                <p class="font-weight-bold">Contract Type: Others - {{current_order[10]}}</p>
+              {% else %}
+                <p class="font-weight-bold">Contract Type: {{current_order[9]}}</p>
+              {% endif %}
+
+                <label for="liftno">Lift No.:</label>
+                <input type="text" id="liftno" name="liftno" class="form-control" style="margin: auto; width:30%; text-align:center;" required>
+<br>
+                <label for="liftno">Date.:</label>
+
+              <input type="date" id="date" name="date" class="form-control"  value="{{current_date}}" min="2018-01-01" style="margin: auto; width:30%; text-align:center;" required>
+
+            </div>
+    </div>
+
+    <hr>
+
+    <table id="partition-group" class="partition-group">
+      <tr>
+        <th>MOTOR ROOM</th>
+        <th></th>
+        <th>S</th>
+        <th>3M</th>
+        <th>6M</th>
+        <th>12M</th>
+        <th>CHECKED</th>
+
+      </tr>
+      <tr>
+        <td>01</td>
+        <td>CLEANING & CHECKING BRAKE SLEEVES / SHAFT / PLUNGER</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="01" name="01" value="X"></td>
+      </tr>
+      <tr>
+        <td>02</td>
+        <td>CHECKING BRAKE LINING (MINIMUM THICKNESS 3 MILLIMETERS)</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="02" name="02" value="X"></td>
+      </tr>
+      <tr>
+        <td>03</td>
+        <td>GENERAL BRAKE ADJUSTMENT & OILING</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="03" name="03" value="X"></td>
+      </tr>
+      <tr>
+        <td>04</td>
+        <td>GOVERNOR MACHINE, OILING & FUNCTIONING / TENSION PULLEY</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="04" name="04" value="X"></td>
+      </tr>
+      <tr>
+        <td>05</td>
+        <td>DETECTION OF IRREGULAR NOISE FROM STAND / THRUST BEARINGS</td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="05" name="05" value="X"></td>
+      </tr>
+      <tr>
+        <td>06</td>
+        <td>CHECK WEARING OF SHEAVE GROOVES / WIRE ROPES</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="06" name="06" value="X"></td>
+      </tr>
+      <tr>
+        <td>07</td>
+        <td>CHECK TRACTION MACHINE CARBON BRUSHES / HOLDER SPRING / sup RINGS</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="07" name="07" value="X"></td>
+      </tr>
+      <tr>
+        <td>08</td>
+        <td>TIGHTENING OF RELAY & TERMINAL SCREWS / CHECK FUSE HOLDER</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="08" name="08" value="X"></td>
+      </tr>
+      <tr>
+        <td>09</td>
+        <td>CLEAN RELAY CONTACTS (MAIN RELAYS ONLY)</td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="09" name="09" value="X"></td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>CHECK GEAR OIL LEVEL AND OIL LEAKAGE</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="10" name="10" value="X"></td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td>GENERAL CLEANING OF MOTOR-ROOM</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="11" name="11" value="X"></td>
+      </tr>
+      <tr>
+        <td>12</td>
+        <td>CHECK EMERGENCY POWER SOURCE - BATTERY BATTERY CHARGER / EBOPS</td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="12" name="12" value="X"></td>
+      </tr>
+      <tr>
+        <td>13</td>
+        <td>CHECK AND GREASE STAND / MOTOR / THRUST BEARINGS</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td><input type="checkbox" id="13" name="13" value="X"></td>
+      </tr>
+
+      <tr>
+        <th>HOISTWAY</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+
+      </tr>
+      <tr>
+        <td>14</td>
+        <td>CLEAN & LUBRICATE DOOR BAR</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="14" name="14" value="X"></td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td>CHECK / ADJUST CATCH DEWCE & DOOR LOCK RELATED</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="15" name="15" value="X"></td>
+      </tr>
+      <tr>
+        <td>16</td>
+        <td>CHECK / ADJUST ECCENTRIC ROLLER</td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="16" name="16" value="X"></td>
+      </tr>
+      <tr>
+        <td>17</td>
+        <td>GENERAL CLEANING OF CAR TOP</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="17" name="17" value="X"></td>
+      </tr>
+      <tr>
+        <td>18</td>
+        <td>CHECK & ADJUST DOOR PANEL</td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="18" name="18" value="X"></td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>CHECK & ADJUST MOVABLE CAM</td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="19" name="19" value="X"></td>
+      </tr>
+      <tr>
+        <td>20</td>
+        <td>CHECK & ADJUST CAR DOOR CHAIN</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="20" name="20" value="X"></td>
+      </tr>
+      <tr>
+        <td>21</td>
+        <td>CHECK & FILL CAR / COUNTERWEIGHT LUBRICATION CAN</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="21" name="21" value="X"></td>
+      </tr>
+      <tr>
+        <td>22</td>
+        <td>CHECK / REPLACE CAR & LANDING DOOR GUIDE SHOES / DOOR SILLS</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="22" name="22" value="X"></td>
+      </tr>
+      <tr>
+        <td>23</td>
+        <td>CHECK WIRE ROPE TENSIONS</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="23" name="23" value="X"></td>
+      </tr>
+      <tr>
+        <td>24</td>
+        <td>CHECK GOVERNOR TENSION PULLEY</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="24" name="24" value="X"></td>
+      </tr>
+      <tr>
+        <td>25</td>
+        <td>CHECK GOVERNOR TENSION PULLEY</td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="25" name="25" value="X"></td>
+      </tr>
+      <tr>
+        <td>26</td>
+        <td>CHECK SAFETY CATCH MECHANISM / TIGHTEN LIFTING ROD SCREWS</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="26" name="26" value="X"></td>
+      </tr>
+      <tr>
+        <td>27</td>
+        <td>CHECK CAR & COUNTERWEIGHT GUIDE SHOES / RAILS</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td><input type="checkbox" id="27" name="27" value="X"></td>
+      </tr>
+      <tr>
+        <td>28</td>
+        <td>TIGHTEN ALL HOISTWAY BOLTS & NUTS</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td><input type="checkbox" id="28" name="28" value="X"></td>
+      </tr>
+      <tr>
+        <td>29</td>
+        <td>MEASURE COUNTERWEIGHT RUN-BY (IF <300MM TO FILL IN MEASUREMENT)></300MM></td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="29" name="29" value="X"></td>
+      </tr>
+      <tr>
+        <td>30</td>
+        <td>CHECK TRAVELLING CABLE / CABLE HANGER</td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="30" name="30" value="X"></td>
+      </tr>
+      <tr>
+        <td>31</td>
+        <td>CHECK OIL BUFFER / SPRING BUFFER / BUFFER SWITCH</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="31" name="31" value="X"></td>
+      </tr>
+      <tr>
+        <td>32</td>
+        <td>CHECK INDUCTOR PLATE HUN-BY</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="32" name="32" value="X"></td>
+      </tr>
+      <tr>
+        <td>33</td>
+        <td>CHECK / ADJUST LANDING DOOR WEIGHTS & ROPES</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="33" name="33" value="X"></td>
+      </tr>
+      <tr>
+        <td>34</td>
+        <td>CHECK OPERATION OF OVERLOAD DEVICE, IF APPLICABLE.</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="34" name="34" value="X"></td>
+      </tr>
+      <tr>
+        <td>35</td>
+        <td>CHECK OPERATION OF OVERLOAD COMPENSATING DEVICE. IF ANY.</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="35" name="35" value="X"></td>
+      </tr>
+      <tr>
+        <td>36</td>
+        <td>OIL COMPENSATION PULLEY AND COMPENSATING ROPE IF APPLICABLE</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="36" name="36" value="X"></td>
+      </tr>
+
+      <tr>
+        <th>LIFT CAR</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+
+      </tr>
+      <tr>
+        <td>37</td>
+        <td>CHECK / REPLACE INDICATOR BULBS IN CAR</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="37" name="37" value="X"></td>
+      </tr>
+      <tr>
+        <td>38</td>
+        <td>CHECK FUNCTION OF ALARM BELLS AND CRIME SYSTEM & LIFT CAR INTERCOM</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="38" name="38" value="X"></td>
+      </tr>
+      <tr>
+        <td>39</td>
+        <td>CHECK IN-CAR PUSH BUTTONS. BULBS & PUSH BUTTONS / REPLACE</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="39" name="39" value="X"></td>
+      </tr>
+      <tr>
+        <td>40</td>
+        <td>CHECK CAR LIGHTING / FAN</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="40" name="40" value="X"></td>
+      </tr>
+      <tr>
+        <td>41</td>
+        <td>CHECK EMERGENCY LIGHT / FAN</td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="41" name="41" value="X"></td>
+      </tr>
+      <tr>
+        <td>42</td>
+        <td>CLEANING OF LIGHT AND FAN DIFFUSER</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td><input type="checkbox" id="42" name="42" value="X"></td>
+      </tr>
+
+      <tr>
+        <th>LANDING</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+
+      </tr>
+      <tr>
+        <td>43</td>
+        <td>CHECK LANDING INDICATOR BULBS / ELECTRONIC INDICATOR / LEDS</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="43" name="43" value="X"></td>
+      </tr>
+      <tr>
+        <td>44</td>
+        <td>CHECK FUNCTION OF DOWN / UP COLLECTIVE SYSTEM</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="44" name="44" value="X"></td>
+      </tr>
+      <tr>
+        <td>45</td>
+        <td>CHECK OPERATION OF DUPLEX SYSTEM(IF ANY)</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="45" name="45" value="X"></td>
+      </tr>
+      <tr>
+        <td>46</td>
+        <td>CHECK LANDING RE-OPENING FUNCTION WITH LANDING PUSH BUTTON</td>
+        <td></td>
+        <td></td>
+        <td>*</td>
+        <td></td>
+        <td><input type="checkbox" id="46" name="46" value="X"></td>
+      </tr>
+      <tr>
+        <td>47</td>
+        <td>CHECK LANDING PUSH BUTTON / PUSH BUTTONS / REPLACE</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="47" name="47" value="X"></td>
+      </tr>
+
+      <tr>
+        <th>OTHERS</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+
+      </tr>
+      <tr>
+        <td>48</td>
+        <td>CHECK LIFT OPERATING SYSTEM</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="48" name="48" value="X"></td>
+      </tr>
+      <tr>
+        <td>49</td>
+        <td>LIGHTING • MOTOR ROOM / CAR TOP / PIT</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="49" name=49 value="X"></td>
+      </tr>
+      <tr>
+        <td>50</td>
+        <td>CHECK AND OPERATION / ARD SWITCH"ON" (IF ANY)</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="50" name="50" value="X"></td>
+      </tr>
+      <tr>
+        <td>51</td>
+        <td>ROOF TRAP DOOR / MOTOR ROOM LOCK</td>
+        <td>*</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><input type="checkbox" id="51" name="51" value="X"></td>
+      </tr>
+      
+    </table>
+
+    <br>
+
+    <div id="partition-group" class="partition-group">
+    <h9>RECOMMENDATIONS OF PARTS REPLACEMENTS / REPAIRS : </h9>
+      <textarea id="recommmendations" name="recommendations" rows="4" cols="50" class="form-control" maxlength="115" placeholder="Maximum of 115 characters"></textarea>
+  </div>
+  
+  <div id="mid" class="mid">
+    <h9>S: EVERY SERVICE, 3M: JANUARY, APRIL, JULY, OCTOBER, 6M: FEBBRUARY, AUGUST, 12M: DECEMBER</h9>
+  </div>
+
+<hr>
+  
+
+<div id="partition-group" class="partition-group">
+    <label>REMARKS</label>
+    <textarea id="remarks" name="remarks" rows="4" cols="50" class="form-control" maxlength="115" placeholder="Maximum of 115 characters"></textarea>
+</div>
+
+<br>
+
+    <div class="jobdone_toggle">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+            Enter Signature
+        </button>
+    </div>
+</div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Service Report Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          Is the information that you have entered in the Service Report all CORRECT?
+      </div>
+      <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Yes, Proceed to Signing</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+    <br><br>
+
+</form>
+
+</div>
+</body>
+</html>

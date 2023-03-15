@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOM - Sign</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.2/dist/signature_pad.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href= {{url_for("static",filename="/loader.css")}}>
+    <style>
+    #main{
+        margin-top:20%;
+        padding-bottom: 20%;
+     }
+
+     .panel {
+        width: 100%;
+        margin:auto;
+        text-align:center;
+        border:0.1px solid #6c757d;
+     }
+
+     .group {
+        margin:auto;
+        width:80%;
+     }
+
+     h1 {
+        text-align:center;
+        padding-bottom: 10%;
+     }
+
+     border {
+        width: 310.5px;
+     }
+
+     canvas {
+        margin-top: 6px;
+        border:1px solid #000000;
+     }
+
+     .form-group {
+        width:50%;
+        float: left;
+        padding: 2%;
+     }
+
+    /* Responsive based on preset screen size */
+@media (max-width: 400px) {
+    canvas {
+        margin-top: 6px;
+        width: 100%;
+        border: 1px solid #000000;
+        }
+
+    .panel {
+        width: 100%;
+        margin:auto;
+        text-align:center;
+        border: 0.1px solid #6c757d;
+     }
+    }
+
+
+
+    </style>
+</head>
+<body>
+<div class="loading hidden" >
+      <div class='uil-ring-css' style='transform:scale(0.79);'>
+        <div></div>
+      </div>
+</div>
+
+{% block navbar %}
+{% include "includes/_navbar2.html" %}
+{% endblock %}
+
+{% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-warning  alert-dismissible" >
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            {{message}}
+          </div>
+        {% endfor %}
+      {% endif %}
+{% endwith %}
+    <div id="main" class="container">
+        <h1 class="font-weight-light">Sign Off</h1>
+        <br>
+        <hr>
+        <br>
+        <div class="group">
+            <h5 class="font-weight-light">Assignee Sign Off: </h5>
+                <div class="panel" >
+                        <canvas id="sign_asgnee" class="canvas">
+                        </canvas>
+                </div>
+            <div class="form-group">
+               <label for="handoverdate">Handover Date</label>
+               <input type="date" name="handoverdate" class="form-control" id="handoverdate" value={{current_date}}" min="2018-01-01" required>
+            </div><br><br><br><br><br>
+            <!-- <div class="form-group">
+               <label for="ackdate">Acknowledgment Date</label>
+               <input type="date" name="ackdate" class="form-control" id="ackdate" value="{{current_date}}" min="2018-01-01" required>
+            </div> -->
+            <div>
+            <button type="button" class="btn btn-dark" id="" onclick="refresh1()">Clear</button>
+            </div>
+
+        </div>
+        <br><br><br>
+
+        <div class="group">
+            <h5 class="font-weight-light">Client Sign Off: </h5>
+                <div class="panel" >
+                        <canvas id="sign_client" class="canvas">
+                        </canvas>
+                </div>
+            <div class="form-group">
+               <label for="ackdate">Acknowledgment Date</label>
+               <input type="date" name="ackdate" class="form-control" id="ackdate" value="{{current_date}}" min="2018-01-01" required>
+            </div><br><br><br><br><br>
+            <button type="button" class="btn btn-dark" onclick="refresh2()">Clear</button>
+            <button type="button" class="btn btn-primary" id="submit" onclick="toggleLoading(); check();" >Submit ALL</button>
+            </div>
+
+                <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">SUBMISSION</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to submit?
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" onclick="toggleLoading(); imagetoData();">Yes</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        var canvas1 = document.getElementById("sign_asgnee");
+        var canvas2 = document.getElementById("sign_client");
+        var signaturePad1 = new SignaturePad(canvas1);
+        var signaturePad2 = new SignaturePad(canvas2);
+
+        const img_list = ['{{track_no}}']
+
+        function setupSignatureBox1(){
+            var signaturePad1 = new SignaturePad(canvas1);
+
+        }
+
+        function setupSignatureBox2(){
+            var signaturePad2 = new SignaturePad(canvas2);
+        }
+
+        function refresh1() {
+            result = new SignaturePad(canvas1).clear();
+        }
+
+        function refresh2() {
+            result = new SignaturePad(canvas2).clear();
+        }
+
+        function submit(img_list) {
+
+            $.ajax({
+                    url:"/processing2",
+                    type:"POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(img_list),
+                    success: function (response) {
+                            alert("Job Done. Go back to Main page.");
+                            window.location.href = "/workOrder";
+                    }
+            });
+        }
+
+        function imagetoData() {
+            var encodedimg1 = signaturePad1.toDataURL();
+            var encodedimg2 = signaturePad2.toDataURL();
+
+            const data1 = encodedimg1.split(',')[1];
+            const data2 = encodedimg2.split(',')[1];
+
+
+            img_list.push(data1);
+            img_list.push(data2);
+            img_list.push($("#handoverdate").val());
+            img_list.push($("#ackdate").val());
+            submit(img_list);
+
+
+}
+        function check() {
+         if (!($('#review').val()) ) {
+                        console.log("empty");
+                        $('#exampleModalCenter').modal('show');
+
+                    }
+
+                    else {
+                        imagetoData();
+
+                }
+
+         }
+
+        document.addEventListener("DOMContentLoaded", setupSignatureBox1);
+        document.addEventListener("DOMContentLoaded", setupSignatureBox2);
+
+
+
+        var loadingOverlay = document.querySelector('.loading');
+        function toggleLoading(){
+          document.activeElement.blur();
+          console.log('hi')
+          if (loadingOverlay.classList.contains('hidden')){
+            loadingOverlay.classList.remove('hidden');
+          } else {
+            loadingOverlay.classList.add('hidden');
+          }
+        }
+
+    </script>
+</body>
+</html>
